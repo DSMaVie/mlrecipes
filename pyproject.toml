@@ -1,0 +1,79 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mlrecipes"
+dynamic = ["version"]
+description = 'An opinionated Library to orchestrate ML Experiment Pipelines using MLFlow.'
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+keywords = ["MLFlow", "Experiment","Orchestration", "Machine Learning"]
+authors = [
+  { name = "Max Vieweg", email = "j0hnc00ney.mv@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "pydantic~=2.8",
+  "pyyaml~=6.0"
+]
+
+[project.urls]
+Documentation = "https://github.com/DSMaVie/mlrecipes#readme"
+Issues = "https://github.com/DSMaVie/mlrecipes/issues"
+Source = "https://github.com/DSMaVie/mlrecipes"
+
+[tool.hatch.version]
+path = "src/mlrecipes/__about__.py"
+
+[tool.hatch.envs.hatch-test]
+dependencies = [
+  "coverage[toml]>=6.5",
+  "pytest",
+]
+
+[tool.hatch.envs.hatch-test.scripts]
+test = "pytest {args:tests}"
+test-cov = "coverage run -m pytest {args:tests}"
+cov-report = [
+  "mlrecipes coverage combine",
+  "coverage report",
+]
+cov = [
+  "test-cov",
+  "cov-report",
+]
+
+[tool.hatch.envs.types]
+dependencies = [
+  "mypy>=1.0.0",
+]
+
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/_ tests}"
+
+[tool.coverage.run]
+source_pkgs = ["_", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/_/__about__.py",
+]
+
+[tool.coverage.paths]
+_ = ["src/_", "*/-/src/_"]
+tests = ["tests", "*/-/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
